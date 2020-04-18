@@ -1,0 +1,24 @@
+#######################
+# SPRING CONFIG LOCAL #
+#######################
+
+name: skill-up-api-local
+
+spring:
+  jpa:
+    database: POSTGRESQL
+    hibernate.ddl-auto: create-drop
+  datasource:
+    platform: postgresql
+    driver-class-name: org.postgresql.Driver
+    url: jdbc:postgresql://localhost:5432/skillupdb
+    username: postgres
+    password: skilluppwd
+    
+server:
+  port: 9000
+    
+logging:
+  pattern:
+    level: DEBUG
+    

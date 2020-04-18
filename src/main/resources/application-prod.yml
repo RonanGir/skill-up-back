@@ -1,0 +1,20 @@
+######################
+# SPRING CONFIG PROD #
+######################
+
+name: skill-up-api
+
+spring:
+  jpa:
+    database: POSTGRESQL
+    hibernate.ddl-auto: update
+  datasource:
+    platform: postgresql
+    driver-class-name: org.postgresql.Driver
+    url: jdbc:postgresql://localhost:5432/skillupdb
+    username: postgres
+    password: skilluppwd
+
+logging:
+  pattern:
+    level: WARN

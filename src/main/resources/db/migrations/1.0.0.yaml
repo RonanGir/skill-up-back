@@ -1,0 +1,43 @@
+databaseChangeLog:
+  - changeSet:
+     id: create-schema
+     author: skillup
+     changes: 
+      - sql:
+          comment: Ajout des droits sur la BDD
+          endDelimiter: ; 
+          sql: GRANT ALL PRIVILEGES ON DATABASE skillupdb TO postgres
+      - sql:
+          comment: Creation du schema
+          endDelimiter: ; 
+          sql: CREATE SCHEMA skillupdb
+      - sql:
+          comment: Ajout des droits au schema
+          endDelimiter: ; 
+          sql: GRANT ALL PRIVILEGES ON ALL TABLES IN schema skillupdb TO postgres
+      - sql:
+          comment: Activation du module de cryptage
+          endDelimiter: ; 
+          sql: CREATE EXTENSION IF NOT EXISTS pgcrypto
+          
+  - changeSet:
+      id: createTable-test
+      author: skillup
+      changes:
+      - createTable:
+          columns:
+          - column:
+              name: id
+              type: int
+              autoIncrement: true
+              constraints:
+                primaryKey: true
+                nullable: false
+          - column:
+              name: firstname
+              type: varchar(35)
+          - column:
+              name: lastname
+              type: varchar(35)
+          schemaName: skillupdb
+          tableName: user

@@ -1,0 +1,25 @@
+########################
+# SPRING CONFIG GLOBAL #
+########################
+
+spring:
+  profiles:
+  - local
+  - dev
+  - prod
+  active:
+    - local
+  jpa:
+    database: POSTGRESQL
+    hibernate.ddl-auto: update
+    show-sql: false
+  datasource:
+    platform: postgresql
+    driver-class-name: org.postgresql.Driver
+    url: jdbc:postgresql://localhost:5432/skillupdb
+    username: postgres
+    password: skilluppwd
+    
+logging:
+  pattern:
+    level: WARN

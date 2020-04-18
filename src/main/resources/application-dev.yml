@@ -1,0 +1,22 @@
+#########################
+# SPRING CONFIG RECETTE #
+#########################
+
+name: skill-up-api-recette
+
+spring:
+  jpa:
+    database: POSTGRESQL
+    hibernate.ddl-auto: create-drop
+  datasource:
+    platform: postgresql
+    driver-class-name: org.postgresql.Driver
+    url: jdbc:postgresql://localhost:5432/skillupdb
+    username: postgres
+    password: skilluppwd
+
+logging:
+  pattern:
+    level: WARN
+    
+  

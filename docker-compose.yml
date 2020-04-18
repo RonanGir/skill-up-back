@@ -1,0 +1,15 @@
+version: "2"
+
+services:
+  skill-up-back:
+    image: skill-up-back
+    container_name: skill-up-app-back
+    ports:
+      - '8080:8080'
+    build: '.'
+    networks:
+      - skill-up-app-network
+
+networks:
+  skill-up-app-network:
+    external: true
