@@ -21,10 +21,12 @@ databaseChangeLog:
           sql: CREATE EXTENSION IF NOT EXISTS pgcrypto
           
   - changeSet:
-      id: createTable-test
+      id: init-db-schema
       author: skillup
+      # Create table PROFILE
       changes:
       - createTable:
+          comment: /// create table PROFILE ///
           columns:
           - column:
               name: id
@@ -34,10 +36,183 @@ databaseChangeLog:
                 primaryKey: true
                 nullable: false
           - column:
+             name: name
+             type: varchar(25)
+          schemaName: skillupdb
+          tableName: profile
+          comment: /// table PROFILE created ///
+          
+      # Create table USER
+      - createTable:
+          comment: /// create table USER ///
+          columns:
+          - column:
+              name: id
+              type: int
+              autoIncrement: true
+              constraints:
+                primaryKey: true
+                nullable: false
+          - column:
+              name: profile_id
+              type: int
+          - column:
               name: firstname
               type: varchar(35)
           - column:
               name: lastname
               type: varchar(35)
+          - column:
+              name: username
+              type: varchar(55)
+              constraints:
+                unique: true
+                nullable: false
+          - column:
+             name: password
+             type: varchar
+             constraints:
+               nullable: false
+          - column:
+              name: email
+              type: varchar(55)
+              constraints:
+                unique: true
+                nullable: false
           schemaName: skillupdb
           tableName: user
+          comment: /// table USER created ///
+          
+      # Create table DASHBOARD   
+      - createTable:
+          comment: /// create table DASHBOARD ///
+          columns:
+          - column:
+              name: id
+              type: int
+              autoIncrement: true
+              constraints:
+                primaryKey: true
+                nullable: false
+          - column:
+              name: user_id
+              type: int
+          schemaName: skillupdb
+          tableName: dashboard
+          comment: /// table DASHBOARD created ///
+
+      # Create table TUTO
+      - createTable:
+          comment: /// create table TUTORIAL ///
+          columns:
+          - column:
+              name: id
+              type: int
+              autoIncrement: true
+              constraints:
+                primaryKey: true
+                nullable: false
+          - column:
+              name: tag_id
+              type: int
+          - column:
+              name: title
+              type: varchar
+              constraints:
+                nullable: false
+          - column:
+              name: url
+              type: varchar
+              constraints:
+                nullable: false
+          - column:
+              name: description
+              type: text
+          schemaName: skillupdb
+          tableName: tutorial
+          comment: /// table TUTORIAL created ///
+          
+      # Create table TAG   
+      - createTable:
+          comment: /// create table TAG ///
+          columns:
+          - column:
+              name: id
+              type: int
+              autoIncrement: true
+              constraints:
+                primaryKey: true
+                nullable: false
+          - column:
+              name: category_id
+              type: int
+          - column:
+              name: name
+              type: varchar
+          schemaName: skillupdb
+          tableName: tag
+          comment: /// table TAG created ///
+
+      # Create table CATEGORY   
+      - createTable:
+          comment: /// create table CATEGORY ///
+          columns:
+          - column:
+              name: id
+              type: int
+              autoIncrement: true
+              constraints:
+                primaryKey: true
+                nullable: false
+          - column:
+              name: name
+              type: varchar
+          schemaName: skillupdb
+          tableName: category
+          comment: /// table CATEGORY created ///
+
+  - changeSet:
+      id: add-foreign-key-constraints
+      author: skillup
+      # ADD foreign key constraints
+      changes:
+        - addForeignKeyConstraint:
+            baseColumnNames: profile_id
+            baseTableName: user
+            baseTableSchemaName: skillupdb
+            constraintName: fk_user_profile   
+            referencedColumnNames: id
+            referencedTableName: profile
+            referencedTableSchemaName: skillupdb
+            validate: true
+            
+        - addForeignKeyConstraint:
+            baseColumnNames: user_id
+            baseTableName: dashboard
+            baseTableSchemaName: skillupdb
+            constraintName: fk_dashboard_user
+            onDelete: CASCADE       
+            referencedColumnNames: id
+            referencedTableName: user
+            referencedTableSchemaName: skillupdb
+            validate: true
+
+        - addForeignKeyConstraint:
+            baseColumnNames: tag_id
+            baseTableName: tutorial
+            baseTableSchemaName: skillupdb
+            constraintName: fk_tutorial_tag    
+            referencedColumnNames: id
+            referencedTableName: tag
+            referencedTableSchemaName: skillupdb
+            validate: true
+
+        - addForeignKeyConstraint:
+            baseColumnNames: category_id
+            baseTableName: tag
+            baseTableSchemaName: skillupdb
+            constraintName: fk_tag_category      
+            referencedColumnNames: id
+            referencedTableName: category
+            referencedTableSchemaName: skillupdb
+            validate: true
