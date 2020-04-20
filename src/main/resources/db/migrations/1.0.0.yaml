@@ -216,3 +216,16 @@ databaseChangeLog:
             referencedTableName: category
             referencedTableSchemaName: skillupdb
             validate: true
+
+  - changeSet:
+      # INSERT SOME DATA
+      id: insert-datas
+      author: skillup
+      # INSERT SOME DATA INTO PROFILE
+      changes:
+      - sqlFile:
+          encoding: UTF-8
+          path: classpath:db/data/01-insert-data-profiles.sql
+      - sqlFile:
+          encoding: UTF-8
+          path: classpath:db/data/02-insert-data-users.sql
