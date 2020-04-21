@@ -229,3 +229,15 @@ databaseChangeLog:
       - sqlFile:
           encoding: UTF-8
           path: classpath:db/data/02-insert-data-users.sql
+      - sqlFile:
+          encoding: UTF-8
+          path: classpath:db/data/03-insert-data-dashboards.sql
+      - sqlFile:
+          encoding: UTF-8
+          path: classpath:db/data/04-insert-data-categories.sql
+      - sqlFile:
+          encoding: UTF-8
+          path: classpath:db/data/05-insert-data-tags.sql
+      - sqlFile:
+          encoding: UTF-8
+          path: classpath:db/data/06-insert-data-tutorials.sql
