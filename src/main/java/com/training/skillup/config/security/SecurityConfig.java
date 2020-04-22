@@ -1,4 +1,4 @@
-package com.training.skillup.security;
+package com.training.skillup.config.security;
 
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
