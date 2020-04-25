@@ -6,7 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.training.skillup.entity.ProfileEntity;
-import com.training.skillup.service.repository.ProfileRepository;
+import com.training.skillup.repository.ProfileRepository;
 
 @Service
 public class ProfileService {
