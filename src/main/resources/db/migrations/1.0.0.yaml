@@ -19,6 +19,10 @@ databaseChangeLog:
           comment: Activation du module de cryptage
           endDelimiter: ; 
           sql: CREATE EXTENSION IF NOT EXISTS pgcrypto
+      - sql:
+          comment: schema par default
+          endDelimiter: ; 
+          sql: SET search_path = skillupdb
           
   - changeSet:
       id: init-db-schema
@@ -30,7 +34,7 @@ databaseChangeLog:
           columns:
           - column:
               name: id
-              type: int
+              type: bigint
               autoIncrement: true
               constraints:
                 primaryKey: true
@@ -48,14 +52,14 @@ databaseChangeLog:
           columns:
           - column:
               name: id
-              type: int
+              type: bigint
               autoIncrement: true
               constraints:
                 primaryKey: true
                 nullable: false
           - column:
               name: profile_id
-              type: int
+              type: bigint
           - column:
               name: firstname
               type: varchar(35)
@@ -80,7 +84,7 @@ databaseChangeLog:
                 unique: true
                 nullable: false
           schemaName: skillupdb
-          tableName: user
+          tableName: app_user
           comment: /// table USER created ///
           
       # Create table DASHBOARD   
@@ -89,14 +93,14 @@ databaseChangeLog:
           columns:
           - column:
               name: id
-              type: int
+              type: bigint
               autoIncrement: true
               constraints:
                 primaryKey: true
                 nullable: false
           - column:
               name: user_id
-              type: int
+              type: bigint
           schemaName: skillupdb
           tableName: dashboard
           comment: /// table DASHBOARD created ///
@@ -107,14 +111,11 @@ databaseChangeLog:
           columns:
           - column:
               name: id
-              type: int
+              type: bigint
               autoIncrement: true
               constraints:
                 primaryKey: true
                 nullable: false
-          - column:
-              name: tag_id
-              type: int
           - column:
               name: title
               type: varchar
@@ -138,17 +139,17 @@ databaseChangeLog:
           columns:
           - column:
               name: id
-              type: int
+              type: bigint
               autoIncrement: true
               constraints:
                 primaryKey: true
                 nullable: false
           - column:
-              name: category_id
-              type: int
-          - column:
               name: name
               type: varchar
+          - column:
+              name: category_id
+              type: bigint
           schemaName: skillupdb
           tableName: tag
           comment: /// table TAG created ///
@@ -159,7 +160,7 @@ databaseChangeLog:
           columns:
           - column:
               name: id
-              type: int
+              type: bigint
               autoIncrement: true
               constraints:
                 primaryKey: true
@@ -171,6 +172,42 @@ databaseChangeLog:
           tableName: category
           comment: /// table CATEGORY created ///
 
+      # Create table ASS_DASHBOARD_TUTORIAL  
+      - createTable:
+          comment: /// create table ass_dashboard_tutorial ///
+          columns:
+          - column:
+              name: tutorial_id
+              type: bigint
+              constraints:
+                nullable: false
+          - column:
+              name: dashboard_id
+              type: bigint
+              constraints:
+                nullable: false
+          schemaName: skillupdb
+          tableName: ass_dashboard_tutorial
+          comment: /// table ass_dashboard_tutorial created ///
+
+      # Create table ASS_TUTORIAL_TAG
+      - createTable:
+          comment: /// create table ass_tutorial_tag ///
+          columns:
+          - column:
+              name: tag_id
+              type: bigint
+              constraints:
+                nullable: false
+          - column:
+              name: tutorial_id
+              type: bigint
+              constraints:
+                nullable: false
+          schemaName: skillupdb
+          tableName: ass_tutorial_tag
+          comment: /// table ass_tutorial_tag created ///
+
   - changeSet:
       id: add-foreign-key-constraints
       author: skillup
@@ -178,7 +215,7 @@ databaseChangeLog:
       changes:
         - addForeignKeyConstraint:
             baseColumnNames: profile_id
-            baseTableName: user
+            baseTableName: app_user
             baseTableSchemaName: skillupdb
             constraintName: fk_user_profile   
             referencedColumnNames: id
@@ -193,17 +230,7 @@ databaseChangeLog:
             constraintName: fk_dashboard_user
             onDelete: CASCADE       
             referencedColumnNames: id
-            referencedTableName: user
-            referencedTableSchemaName: skillupdb
-            validate: true
-
-        - addForeignKeyConstraint:
-            baseColumnNames: tag_id
-            baseTableName: tutorial
-            baseTableSchemaName: skillupdb
-            constraintName: fk_tutorial_tag    
-            referencedColumnNames: id
-            referencedTableName: tag
+            referencedTableName: app_user
             referencedTableSchemaName: skillupdb
             validate: true
 
@@ -215,6 +242,60 @@ databaseChangeLog:
             referencedColumnNames: id
             referencedTableName: category
             referencedTableSchemaName: skillupdb
+            validate: true
+
+        - addForeignKeyConstraint:
+            baseColumnNames: dashboard_id
+            baseTableName: ass_dashboard_tutorial
+            baseTableSchemaName: skillupdb
+            constraintName: fk_ass_dashboard_tutorial_dashboard_id      
+            referencedColumnNames: id
+            referencedTableName: dashboard
+            referencedTableSchemaName: skillupdb
+            validate: true
+
+        - addForeignKeyConstraint:
+            baseColumnNames: tutorial_id
+            baseTableName: ass_dashboard_tutorial
+            baseTableSchemaName: skillupdb
+            constraintName: fk_ass_dashboard_tutorial_tutorial_id      
+            referencedColumnNames: id
+            referencedTableName: tutorial
+            referencedTableSchemaName: skillupdb
+            validate: true
+            
+        - addForeignKeyConstraint:
+            baseColumnNames: tag_id
+            baseTableName: ass_tutorial_tag
+            baseTableSchemaName: skillupdb
+            constraintName: fk_ass_tutorial_tag_tag_id      
+            referencedColumnNames: id
+            referencedTableName: tag
+            referencedTableSchemaName: skillupdb
+            validate: true
+
+        - addForeignKeyConstraint:
+            baseColumnNames: tutorial_id
+            baseTableName: ass_tutorial_tag
+            baseTableSchemaName: skillupdb
+            constraintName: fk_ass_tutorial_tag_tutorial_id      
+            referencedColumnNames: id
+            referencedTableName: tutorial
+            referencedTableSchemaName: skillupdb
+            validate: true
+            
+        - addUniqueConstraint:
+            columnNames: tutorial_id, dashboard_id
+            constraintName: uc_ass_dashboard_tutorial
+            schemaName: skillupdb
+            tableName: ass_dashboard_tutorial
+            validate: true
+
+        - addUniqueConstraint:
+            columnNames: tutorial_id, tag_id
+            constraintName: uc_ass_tutorial_tag
+            schemaName: skillupdb
+            tableName: ass_tutorial_tag
             validate: true
 
   - changeSet:
@@ -241,3 +322,9 @@ databaseChangeLog:
       - sqlFile:
           encoding: UTF-8
           path: classpath:db/data/06-insert-data-tutorials.sql
+      - sqlFile:
+          encoding: UTF-8
+          path: classpath:db/data/07-insert-data-ass_dashboard_tutorial.sql
+      - sqlFile:
+          encoding: UTF-8
+          path: classpath:db/data/08-insert-data-ass_tutorial_tag.sql
