@@ -7,7 +7,7 @@ name: skill-up-api-recette
 spring:
   jpa:
     database: POSTGRESQL
-    hibernate.ddl-auto: create-drop
+    hibernate.ddl-auto: update
   datasource:
     platform: postgresql
     driver-class-name: org.postgresql.Driver

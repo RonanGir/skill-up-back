@@ -19,25 +19,312 @@ databaseChangeLog:
           comment: Activation du module de cryptage
           endDelimiter: ; 
           sql: CREATE EXTENSION IF NOT EXISTS pgcrypto
+      - sql:
+          comment: schema par default
+          endDelimiter: ; 
+          sql: SET search_path = skillupdb
           
   - changeSet:
-      id: createTable-test
+      id: init-db-schema
       author: skillup
+      # Create table PROFILE
       changes:
       - createTable:
+          comment: /// create table PROFILE ///
           columns:
           - column:
               name: id
-              type: int
+              type: bigint
               autoIncrement: true
               constraints:
                 primaryKey: true
                 nullable: false
+          - column:
+             name: name
+             type: varchar(25)
+          schemaName: skillupdb
+          tableName: profile
+          comment: /// table PROFILE created ///
+          
+      # Create table USER
+      - createTable:
+          comment: /// create table USER ///
+          columns:
+          - column:
+              name: id
+              type: bigint
+              autoIncrement: true
+              constraints:
+                primaryKey: true
+                nullable: false
+          - column:
+              name: profile_id
+              type: bigint
           - column:
               name: firstname
               type: varchar(35)
           - column:
               name: lastname
               type: varchar(35)
+          - column:
+              name: username
+              type: varchar(55)
+              constraints:
+                unique: true
+                nullable: false
+          - column:
+             name: password
+             type: varchar
+             constraints:
+               nullable: false
+          - column:
+              name: email
+              type: varchar(55)
+              constraints:
+                unique: true
+                nullable: false
           schemaName: skillupdb
-          tableName: user
+          tableName: app_user
+          comment: /// table USER created ///
+          
+      # Create table DASHBOARD   
+      - createTable:
+          comment: /// create table DASHBOARD ///
+          columns:
+          - column:
+              name: id
+              type: bigint
+              autoIncrement: true
+              constraints:
+                primaryKey: true
+                nullable: false
+          - column:
+              name: user_id
+              type: bigint
+          schemaName: skillupdb
+          tableName: dashboard
+          comment: /// table DASHBOARD created ///
+
+      # Create table TUTO
+      - createTable:
+          comment: /// create table TUTORIAL ///
+          columns:
+          - column:
+              name: id
+              type: bigint
+              autoIncrement: true
+              constraints:
+                primaryKey: true
+                nullable: false
+          - column:
+              name: title
+              type: varchar
+              constraints:
+                nullable: false
+          - column:
+              name: url
+              type: varchar
+              constraints:
+                nullable: false
+          - column:
+              name: description
+              type: text
+          schemaName: skillupdb
+          tableName: tutorial
+          comment: /// table TUTORIAL created ///
+          
+      # Create table TAG   
+      - createTable:
+          comment: /// create table TAG ///
+          columns:
+          - column:
+              name: id
+              type: bigint
+              autoIncrement: true
+              constraints:
+                primaryKey: true
+                nullable: false
+          - column:
+              name: name
+              type: varchar
+          - column:
+              name: category_id
+              type: bigint
+          schemaName: skillupdb
+          tableName: tag
+          comment: /// table TAG created ///
+
+      # Create table CATEGORY   
+      - createTable:
+          comment: /// create table CATEGORY ///
+          columns:
+          - column:
+              name: id
+              type: bigint
+              autoIncrement: true
+              constraints:
+                primaryKey: true
+                nullable: false
+          - column:
+              name: name
+              type: varchar
+          schemaName: skillupdb
+          tableName: category
+          comment: /// table CATEGORY created ///
+
+      # Create table ASS_DASHBOARD_TUTORIAL  
+      - createTable:
+          comment: /// create table ass_dashboard_tutorial ///
+          columns:
+          - column:
+              name: tutorial_id
+              type: bigint
+              constraints:
+                nullable: false
+          - column:
+              name: dashboard_id
+              type: bigint
+              constraints:
+                nullable: false
+          schemaName: skillupdb
+          tableName: ass_dashboard_tutorial
+          comment: /// table ass_dashboard_tutorial created ///
+
+      # Create table ASS_TUTORIAL_TAG
+      - createTable:
+          comment: /// create table ass_tutorial_tag ///
+          columns:
+          - column:
+              name: tag_id
+              type: bigint
+              constraints:
+                nullable: false
+          - column:
+              name: tutorial_id
+              type: bigint
+              constraints:
+                nullable: false
+          schemaName: skillupdb
+          tableName: ass_tutorial_tag
+          comment: /// table ass_tutorial_tag created ///
+
+  - changeSet:
+      id: add-foreign-key-constraints
+      author: skillup
+      # ADD foreign key constraints
+      changes:
+        - addForeignKeyConstraint:
+            baseColumnNames: profile_id
+            baseTableName: app_user
+            baseTableSchemaName: skillupdb
+            constraintName: fk_user_profile   
+            referencedColumnNames: id
+            referencedTableName: profile
+            referencedTableSchemaName: skillupdb
+            validate: true
+            
+        - addForeignKeyConstraint:
+            baseColumnNames: user_id
+            baseTableName: dashboard
+            baseTableSchemaName: skillupdb
+            constraintName: fk_dashboard_user
+            onDelete: CASCADE       
+            referencedColumnNames: id
+            referencedTableName: app_user
+            referencedTableSchemaName: skillupdb
+            validate: true
+
+        - addForeignKeyConstraint:
+            baseColumnNames: category_id
+            baseTableName: tag
+            baseTableSchemaName: skillupdb
+            constraintName: fk_tag_category      
+            referencedColumnNames: id
+            referencedTableName: category
+            referencedTableSchemaName: skillupdb
+            validate: true
+
+        - addForeignKeyConstraint:
+            baseColumnNames: dashboard_id
+            baseTableName: ass_dashboard_tutorial
+            baseTableSchemaName: skillupdb
+            constraintName: fk_ass_dashboard_tutorial_dashboard_id      
+            referencedColumnNames: id
+            referencedTableName: dashboard
+            referencedTableSchemaName: skillupdb
+            validate: true
+
+        - addForeignKeyConstraint:
+            baseColumnNames: tutorial_id
+            baseTableName: ass_dashboard_tutorial
+            baseTableSchemaName: skillupdb
+            constraintName: fk_ass_dashboard_tutorial_tutorial_id      
+            referencedColumnNames: id
+            referencedTableName: tutorial
+            referencedTableSchemaName: skillupdb
+            validate: true
+            
+        - addForeignKeyConstraint:
+            baseColumnNames: tag_id
+            baseTableName: ass_tutorial_tag
+            baseTableSchemaName: skillupdb
+            constraintName: fk_ass_tutorial_tag_tag_id      
+            referencedColumnNames: id
+            referencedTableName: tag
+            referencedTableSchemaName: skillupdb
+            validate: true
+
+        - addForeignKeyConstraint:
+            baseColumnNames: tutorial_id
+            baseTableName: ass_tutorial_tag
+            baseTableSchemaName: skillupdb
+            constraintName: fk_ass_tutorial_tag_tutorial_id      
+            referencedColumnNames: id
+            referencedTableName: tutorial
+            referencedTableSchemaName: skillupdb
+            validate: true
+            
+        - addUniqueConstraint:
+            columnNames: tutorial_id, dashboard_id
+            constraintName: uc_ass_dashboard_tutorial
+            schemaName: skillupdb
+            tableName: ass_dashboard_tutorial
+            validate: true
+
+        - addUniqueConstraint:
+            columnNames: tutorial_id, tag_id
+            constraintName: uc_ass_tutorial_tag
+            schemaName: skillupdb
+            tableName: ass_tutorial_tag
+            validate: true
+
+  - changeSet:
+      # INSERT SOME DATA
+      id: insert-datas
+      author: skillup
+      # INSERT SOME DATA INTO PROFILE
+      changes:
+      - sqlFile:
+          encoding: UTF-8
+          path: classpath:db/data/01-insert-data-profiles.sql
+      - sqlFile:
+          encoding: UTF-8
+          path: classpath:db/data/02-insert-data-users.sql
+      - sqlFile:
+          encoding: UTF-8
+          path: classpath:db/data/03-insert-data-dashboards.sql
+      - sqlFile:
+          encoding: UTF-8
+          path: classpath:db/data/04-insert-data-categories.sql
+      - sqlFile:
+          encoding: UTF-8
+          path: classpath:db/data/05-insert-data-tags.sql
+      - sqlFile:
+          encoding: UTF-8
+          path: classpath:db/data/06-insert-data-tutorials.sql
+      - sqlFile:
+          encoding: UTF-8
+          path: classpath:db/data/07-insert-data-ass_dashboard_tutorial.sql
+      - sqlFile:
+          encoding: UTF-8
+          path: classpath:db/data/08-insert-data-ass_tutorial_tag.sql
