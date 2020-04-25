@@ -11,14 +11,19 @@ import lombok.Data;
 
 @Data
 @Entity
-@Table(name = "profile", schema = "skillupdb")
+@Table(
+		name = "profile", schema = "skillupdb"
+)
 public class ProfileEntity {
 
 	@Id
-	@GeneratedValue(strategy = GenerationType.AUTO)
+	@GeneratedValue(
+			strategy = GenerationType.IDENTITY
+	)
 	private Long id;
 
-	@Column(length = 25)
+	@Column(
+			length = 25
+	)
 	private String name;
-
 }
