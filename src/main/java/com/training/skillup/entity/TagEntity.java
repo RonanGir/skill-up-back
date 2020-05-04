@@ -22,37 +22,25 @@ import lombok.Setter;
 @Getter
 @Setter
 @Entity
-@Table(
-		name = "tag", schema = "skillupdb"
-)
+@Table(name = "tag", schema = "skillupdb")
 public class TagEntity {
 
 	@Id
-	@GeneratedValue(
-			strategy = GenerationType.IDENTITY
-	)
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
 
 	private String name;
 
-	@ManyToOne(
-			fetch = FetchType.EAGER
-	)
-	@JoinColumn(
-			name = "category_id"
-	)
+	@ManyToOne(fetch = FetchType.EAGER)
+	@JoinColumn(name = "category_id")
 	private CategoryEntity category;
 
-	@ManyToMany(
-			fetch = FetchType.EAGER
-	)
+	@ManyToMany(fetch = FetchType.EAGER)
 	@JoinTable(
-			name = "ass_tutorial_tag", joinColumns = { @JoinColumn(
-					name = "tag_id"
-			) }, inverseJoinColumns = { @JoinColumn(
-					name = "tutorial_id"
-			) }
-	)
+			name = "ass_tutorial_tag", 
+			joinColumns = { @JoinColumn(name = "tag_id") }, 
+			inverseJoinColumns = { @JoinColumn(name = "tutorial_id") }
+			)
 	@JsonIgnore
 	private Set<TutorialEntity> tutorials = new HashSet<>();
 

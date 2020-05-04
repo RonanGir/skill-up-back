@@ -23,12 +23,10 @@ import lombok.Setter;
 @Entity
 @Table(
 		name = "tutorial", schema = "skillupdb"
-)
+		)
 public class TutorialEntity {
 	@Id
-	@GeneratedValue(
-			strategy = GenerationType.IDENTITY
-	)
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
 
 	private String title;
@@ -37,28 +35,20 @@ public class TutorialEntity {
 
 	private String description;
 
-	@ManyToMany(
-			fetch = FetchType.EAGER
-	)
+	@ManyToMany(fetch = FetchType.EAGER)
 	@JoinTable(
-			name = "ass_tutorial_tag", joinColumns = { @JoinColumn(
-					name = "tutorial_id", referencedColumnName = "id"
-			) }, inverseJoinColumns = { @JoinColumn(
-					name = "tag_id", referencedColumnName = "id"
-			) }
-	)
+			name = "ass_tutorial_tag", 
+			joinColumns = { @JoinColumn(name = "tutorial_id", referencedColumnName = "id") }, 
+			inverseJoinColumns = { @JoinColumn(name = "tag_id", referencedColumnName = "id") }
+			)
 	private Set<TagEntity> tags = new HashSet<>();
 
-	@ManyToMany(
-			fetch = FetchType.EAGER
-	)
+	@ManyToMany(fetch = FetchType.EAGER)
 	@JoinTable(
-			name = "ass_dashboard_tutorial", joinColumns = { @JoinColumn(
-					name = "tutorial_id", referencedColumnName = "id"
-			) }, inverseJoinColumns = { @JoinColumn(
-					name = "dashboard_id", referencedColumnName = "id"
-			) }
-	)
+			name = "ass_dashboard_tutorial", 
+			joinColumns = { @JoinColumn(name = "tutorial_id", referencedColumnName = "id") }, 
+			inverseJoinColumns = { @JoinColumn(name = "dashboard_id", referencedColumnName = "id") }
+			)
 	@JsonIgnore
 	private Set<DashboardEntity> dashboards = new HashSet<>();
 }

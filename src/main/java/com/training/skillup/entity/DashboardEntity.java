@@ -20,32 +20,22 @@ import lombok.Data;
 @Entity
 @Table(
 		name = "dashboard", schema = "skillupdb"
-)
+		)
 public class DashboardEntity {
 
 	@Id
-	@GeneratedValue(
-			strategy = GenerationType.IDENTITY
-	)
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
 
-	@OneToOne(
-			fetch = FetchType.EAGER
-	)
-	@JoinColumn(
-			name = "user_id"
-	)
+	@OneToOne(fetch = FetchType.EAGER)
+	@JoinColumn(name = "user_id")
 	private UserEntity user;
 
-	@ManyToMany(
-			fetch = FetchType.EAGER
-	)
+	@ManyToMany(fetch = FetchType.EAGER)
 	@JoinTable(
-			name = "ass_dashboard_tutorial", joinColumns = { @JoinColumn(
-					name = "dashboard_id", referencedColumnName = "id"
-			) }, inverseJoinColumns = { @JoinColumn(
-					name = "tutorial_id", referencedColumnName = "id"
-			) }
-	)
+			name = "ass_dashboard_tutorial", 
+			joinColumns = { @JoinColumn(name = "dashboard_id", referencedColumnName = "id") }, 
+			inverseJoinColumns = { @JoinColumn(name = "tutorial_id", referencedColumnName = "id") }
+			)
 	private Set<TutorialEntity> tutorials = new HashSet<>();
 }
