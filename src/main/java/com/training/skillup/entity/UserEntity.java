@@ -25,9 +25,11 @@ public class UserEntity {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
 
+	@JsonIgnore
 	@Column(length = 35)
 	private String firstname;
 
+	@JsonIgnore
 	@Column(length = 35)
 	private String lastname;
 

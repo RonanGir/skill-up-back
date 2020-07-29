@@ -24,4 +24,8 @@ public class UserService {
 		return userMap.userEntitiesToUserBeans(userEntities);
 	}
 
+	public UserEntity findUserByEmail(String email) {
+		return userRepo.findByEmail(email);
+	}
+
 }

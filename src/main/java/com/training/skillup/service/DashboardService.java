@@ -24,10 +24,13 @@ public class DashboardService {
 	DashboardMapper dashMap;
 
 	@Autowired
+	UserService userService;
+
+	@Autowired
 	DashboardRepository dashRepo;
 
 	public DashboardBean findDashboardByUser(UserBean user) {
-		UserEntity userEntity = userMap.userBeanToUserEntity(user);
+		UserEntity userEntity = userService.findUserByEmail(user.getEmail());
 		DashboardEntity dashEntity = dashRepo.findByUser(userEntity);
 		return dashMap.dashboardEntityToDashboardBean(dashEntity);
 

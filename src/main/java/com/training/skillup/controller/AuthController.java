@@ -1,5 +1,10 @@
 package com.training.skillup.controller;
 
+import java.util.Collections;
+import java.util.Map;
+
+import javax.servlet.http.HttpSession;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -22,10 +27,16 @@ public class AuthController {
 
 	@RequestMapping(value = "/login", method = RequestMethod.POST) 
 	public UserDetails login(@RequestBody CredentialBean credentials) throws Exception {
+		log.debug("/login");
 		UserDetails user = loginService.loadUserByUsername(credentials.getEmail());
 		if (!loginService.passwordMatch(credentials.getPassword(), user.getPassword())) {
 			throw new Exception(Constant.WRONG_PASSWORD);
 		}
 		return user;
+	}
+
+	@RequestMapping(value = "/token", method = RequestMethod.POST) 
+	public Map<String, String> token(HttpSession session) {
+		return Collections.singletonMap("token", session.getId());
 	}
 }

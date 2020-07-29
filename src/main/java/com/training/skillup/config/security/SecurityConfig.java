@@ -1,5 +1,6 @@
 package com.training.skillup.config.security;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
@@ -14,6 +15,9 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 @Configuration
 @EnableWebSecurity
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
+
+	@Autowired
+	private MyBasicAuthenticationEntryPoint authenticationEntryPoint;
 
 	@Bean	
 	public UserDetailsService userDetailsService() {
@@ -49,7 +53,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 		.antMatchers("/admin/api/**").hasRole("ADMIN")
 		.anyRequest().authenticated()
 		.and()
-		.httpBasic();
+		.httpBasic()
+		.authenticationEntryPoint(authenticationEntryPoint);
 	}
 
 }

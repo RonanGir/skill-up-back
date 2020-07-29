@@ -25,6 +25,10 @@ spring:
     username: postgres
     password: skilluppwd
     
+    
 logging:
   pattern:
     level: WARN
+    
+ 
+  
