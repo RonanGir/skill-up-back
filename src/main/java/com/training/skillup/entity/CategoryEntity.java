@@ -22,26 +22,18 @@ import lombok.Setter;
 @Entity
 @Table(
 		name = "category", schema = "skillupdb"
-)
+		)
 public class CategoryEntity {
 
 	@Id
-	@GeneratedValue(
-			strategy = GenerationType.IDENTITY
-	)
-	@Column(
-			name = "id"
-	)
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	@Column(name = "id")
 	private Long id;
 
-	@Column(
-			name = "name"
-	)
+	@Column(name = "name")
 	private String name;
 
-	@OneToMany(
-			mappedBy = "category", fetch = FetchType.EAGER
-	)
+	@OneToMany(mappedBy = "category", fetch = FetchType.EAGER)
 	@JsonIgnore
 	private Set<TagEntity> tags = new HashSet<>();
 
