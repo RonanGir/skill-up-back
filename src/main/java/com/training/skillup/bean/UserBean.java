@@ -9,7 +9,6 @@ public class UserBean {
 
 	private Long id;
 
-	@JsonIgnore
 	private String firstname;
 
 	@JsonIgnore
